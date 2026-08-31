@@ -1,44 +1,98 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
+import { loginUser } from "../features/auth/authSlice";
 
 import "../styles/SignIn.css";
 
 function SignIn() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const { loading, error } = useSelector((state) => state.auth);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const result = await dispatch(
+      loginUser({
+        email,
+        password,
+      })
+    );
+
+    if (loginUser.fulfilled.match(result)) {
+      navigate("/profile");
+    }
+  };
+
   return (
-    <div className="app">
-      <main className="sign-in-main">
-        <section className="sign-in-content">
-          <FontAwesomeIcon
-            className="sign-in-icon"
-            icon={faCircleUser}
-            aria-hidden="true"
-          />
+    <main className="sign-in-main">
+      <section className="sign-in-content">
+        <h1>Sign In</h1>
 
-          <h1>Sign In</h1>
+        <form onSubmit={handleSubmit}>
+          <div className="input-wrapper">
+            <label htmlFor="email">
+              Username
+            </label>
 
-          <form>
-            <div className="input-wrapper">
-              <label htmlFor="username">Username</label>
-              <input type="text" id="username" />
-            </div>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(event) =>
+                setEmail(event.target.value)
+              }
+            />
+          </div>
 
-            <div className="input-wrapper">
-              <label htmlFor="password">Password</label>
-              <input type="password" id="password" />
-            </div>
+          <div className="input-wrapper">
+            <label htmlFor="password">
+              Password
+            </label>
 
-            <div className="input-remember">
-              <input type="checkbox" id="remember-me" />
-              <label htmlFor="remember-me">Remember me</label>
-            </div>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(event) =>
+                setPassword(event.target.value)
+              }
+            />
+          </div>
 
-            <button className="sign-in-button" type="submit">
-              Sign In
-            </button>
-          </form>
-        </section>
-      </main>
-    </div>
+          <div className="input-remember">
+            <input
+              id="remember-me"
+              type="checkbox"
+            />
+
+            <label htmlFor="remember-me">
+              Remember me
+            </label>
+          </div>
+
+          {error && (
+            <p className="login-error">
+              {error}
+            </p>
+          )}
+
+          <button
+            className="sign-in-button"
+            type="submit"
+            disabled={loading}
+          >
+            {loading ? "Connexion..." : "Sign In"}
+          </button>
+        </form>
+      </section>
+    </main>
   );
 }
 

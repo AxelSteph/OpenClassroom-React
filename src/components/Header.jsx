@@ -1,21 +1,46 @@
-import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../features/auth/authSlice";
 
-import "../styles/Header.css";
 import logo from "../assets/argentBankLogo.png";
+import "../styles/Header.css";
 
 function Header() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { isLoggedIn } = useSelector((state) => state.auth);
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/");
+  };
+
   return (
-    <nav className="main-nav">
-      <Link to="/" className="main-nav-logo">
-        <img className="main-nav-logo-image" src={logo} alt="Argent Bank Logo" />
+    <header className="main-nav">
+      <Link className="main-nav-logo" to="/">
+        <img
+          className="main-nav-logo-image"
+          src={logo}
+          alt="Argent Bank"
+        />
       </Link>
-      <Link to="/sign-in" className="main-nav-item">
-        <FontAwesomeIcon icon={faCircleUser} aria-hidden="true" />
-        Sign In
-      </Link>
-    </nav>
+
+      <div>
+        {isLoggedIn ? (
+          <button
+            className="main-nav-item logout-button"
+            onClick={handleLogout}
+          >
+            Sign Out
+          </button>
+        ) : (
+          <Link className="main-nav-item" to="/sign-in">
+            Sign In
+          </Link>
+        )}
+      </div>
+    </header>
   );
 }
 
