@@ -9,7 +9,7 @@ function Header() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { isLoggedIn } = useSelector((state) => state.auth);
+  const { isLoggedIn, user } = useSelector((state) => state.auth);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -28,12 +28,19 @@ function Header() {
 
       <div>
         {isLoggedIn ? (
-          <button
-            className="main-nav-item logout-button"
-            onClick={handleLogout}
-          >
-            Sign Out
-          </button>
+          <>
+            {user && (
+              <Link className="main-nav-item" to="/profile">
+                {user.userName}
+              </Link>
+            )}
+            <button
+              className="main-nav-item logout-button"
+              onClick={handleLogout}
+            >
+              Sign Out
+            </button>
+          </>
         ) : (
           <Link className="main-nav-item" to="/sign-in">
             Sign In

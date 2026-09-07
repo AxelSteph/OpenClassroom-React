@@ -1,22 +1,22 @@
 .main-nav {
-    font-size: 1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 40px;
+  font-size: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 40px;
 }
 
 .main-nav-logo-image {
-    display: block;
-    height: 3.5rem;
-    width: auto;
+  display: block;
+  height: 3.5rem;
+  width: auto;
 }
 
 .main-nav-item {
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
-    color: #2c3e50;
-    font-weight: 700;
-    text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #2c3e50;
+  font-weight: 700;
+  text-decoration: none;
 }

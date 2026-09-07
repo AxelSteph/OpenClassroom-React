@@ -20,7 +20,7 @@ function SignIn() {
 
     const result = await dispatch(
       loginUser({
-        email,
+        email: email.trim(),
         password,
       })
     );
@@ -44,6 +44,7 @@ function SignIn() {
             <input
               id="email"
               type="email"
+              required
               value={email}
               onChange={(event) =>
                 setEmail(event.target.value)
@@ -59,6 +60,7 @@ function SignIn() {
             <input
               id="password"
               type="password"
+              required
               value={password}
               onChange={(event) =>
                 setPassword(event.target.value)
