@@ -1,68 +1,90 @@
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import {
+  useDispatch,
+  useSelector,
+} from "react-redux";
+import { useNavigate } from "react-router-dom";
+
+import Account from "../components/Account";
 
 import {
   fetchUserProfile,
   updateUserName,
 } from "../features/auth/authSlice";
 
+import {
+  fetchAccounts,
+} from "../features/accounts/accountsSlice";
+
 import "../styles/Profile.css";
 
 function Profile() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const { user, loading, error } = useSelector(
+  const { user } = useSelector(
     (state) => state.auth
   );
 
-  const [isEditing, setIsEditing] = useState(false);
-  const [newUserName, setNewUserName] = useState("");
+  const {
+    accounts,
+    loading,
+    error,
+  } = useSelector(
+    (state) => state.accounts
+  );
+
+  const [isEditing, setIsEditing] =
+    useState(false);
+
+  const [userName, setUserName] =
+    useState("");
 
   useEffect(() => {
     dispatch(fetchUserProfile());
+    dispatch(fetchAccounts());
   }, [dispatch]);
 
-  const handleSubmit = async (event) => {
+  const handleSave = async (event) => {
     event.preventDefault();
 
     const result = await dispatch(
-      updateUserName(newUserName)
+      updateUserName(userName)
     );
 
-    if (updateUserName.fulfilled.match(result)) {
+    if (
+      updateUserName.fulfilled.match(result)
+    ) {
       setIsEditing(false);
     }
   };
 
-  if (loading && !user) {
-    return (
-      <main className="profile-main">
-        <p>Chargement...</p>
-      </main>
+  const handleTransactions = (
+    accountId
+  ) => {
+    navigate(
+      `/accounts/${accountId}/transactions`
     );
-  }
+  };
 
   return (
-    <section className="profile-main">
-      {error && (
-        <p className="profile-error">
-          {error}
-        </p>
-      )}
+    <>
+      <main className="profile-main">
 
-      {user && (
         <div className="profile-header">
           <h1>
             Welcome back
             <br />
-            {user.firstName} {user.lastName}!
+
+            {user?.firstName}{" "}
+            {user?.lastName}!
           </h1>
 
           {!isEditing ? (
             <button
               className="edit-button"
               onClick={() => {
-                setNewUserName(user.userName);
+                setUserName(user?.userName || "");
                 setIsEditing(true);
               }}
             >
@@ -71,69 +93,68 @@ function Profile() {
           ) : (
             <form
               className="edit-form"
-              onSubmit={handleSubmit}
+              onSubmit={handleSave}
             >
-              <div>
-                <label htmlFor="username">
-                  User name:
-                </label>
+              <input
+                type="text"
+                value={userName}
+                onChange={(event) =>
+                  setUserName(
+                    event.target.value
+                  )
+                }
+              />
 
-                <input
-                  id="username"
-                  type="text"
-                  value={newUserName}
-                  onChange={(event) =>
-                    setNewUserName(event.target.value)
-                  }
-                />
-              </div>
+              <button type="submit">
+                Save
+              </button>
 
-              <div>
-                <label htmlFor="firstname">
-                  First name:
-                </label>
-
-                <input
-                  id="firstname"
-                  type="text"
-                  value={user.firstName}
-                  disabled
-                />
-              </div>
-
-              <div>
-                <label htmlFor="lastname">
-                  Last name:
-                </label>
-
-                <input
-                  id="lastname"
-                  type="text"
-                  value={user.lastName}
-                  disabled
-                />
-              </div>
-
-              <div className="edit-buttons">
-                <button type="submit">
-                  Save
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    setNewUserName(user.userName);
-                    setIsEditing(false);
-                  }}
-                >
-                  Cancel
-                </button>
-              </div>
+              <button
+                type="button"
+                onClick={() =>
+                  setIsEditing(false)
+                }
+              >
+                Cancel
+              </button>
             </form>
           )}
         </div>
-      )}
-    </section>
+
+        {loading && (
+          <p className="status">
+            Loading accounts...
+          </p>
+        )}
+
+        {error && (
+          <p className="profile-error">
+            {error}
+          </p>
+        )}
+
+        <div className="accounts-container">
+
+          {accounts.map((account) => (
+            <Account
+              key={account.id}
+              name={account.name}
+              mask={account.mask}
+              balance={account.balance}
+              balanceType={
+                account.balanceType
+              }
+              onTransactions={() =>
+                handleTransactions(
+                  account.id
+                )
+              }
+            />
+          ))}
+
+        </div>
+      </main>
+    </>
   );
 }
 

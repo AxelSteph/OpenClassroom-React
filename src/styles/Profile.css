@@ -1,21 +1,28 @@
 .profile-main {
-  min-height: calc(100vh - 160px);
-  padding: 30px;
+  min-height: calc(100vh - 150px);
+  padding: 20px 0 60px;
 
   background-color: #12002b;
-  color: white;
+}
 
+.profile-header {
+  margin-bottom: 35px;
+
+  color: white;
   text-align: center;
 }
 
 .profile-header h1 {
-  margin-top: 0;
+  margin: 0 0 25px;
+
+  font-size: 32px;
+  line-height: 1.05;
 }
 
 .edit-button {
-  padding: 10px;
+  padding: 10px 14px;
 
-  border: none;
+  border: 1px solid #00bc77;
 
   background-color: #00bc77;
   color: white;
@@ -26,55 +33,126 @@
 }
 
 .edit-form {
-  width: 400px;
-  max-width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
 
   margin: 20px auto;
 }
 
-.edit-form > div {
-  display: flex;
-  align-items: center;
-
-  margin-bottom: 15px;
-}
-
-.edit-form label {
-  width: 120px;
-
-  margin-right: 10px;
-
-  text-align: right;
-}
-
 .edit-form input {
-  flex: 1;
-
   padding: 8px;
 
   font-size: 16px;
 }
 
-.edit-buttons {
-  justify-content: center;
-  gap: 10px;
-}
+.edit-form button {
+  padding: 8px 15px;
 
-.edit-buttons button {
-  min-width: 100px;
+  border: 1px solid #00bc77;
 
-  padding: 8px;
-
-  border: none;
-
-  background-color: #00bc77;
-  color: white;
+  background-color: white;
+  color: #00bc77;
 
   font-weight: bold;
 
   cursor: pointer;
 }
 
+.accounts-container {
+  width: 80%;
+  margin: 0 auto;
+}
+
+.account {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  width: 100%;
+
+  margin-bottom: 30px;
+  padding: 24px;
+
+  border: 1px solid black;
+
+  background-color: white;
+
+  color: #2c3e50;
+}
+
+.account-content-wrapper {
+  text-align: left;
+}
+
+.account-title {
+  margin: 0;
+  padding: 0;
+
+  font-size: 16px;
+  font-weight: normal;
+}
+
+.account-amount {
+  margin: 0;
+
+  font-size: 40px;
+  font-weight: bold;
+}
+
+.account-amount-description {
+  margin: 0;
+}
+
+.cta {
+  width: 200px;
+}
+
+.transaction-button {
+  width: 100%;
+  padding: 10px;
+
+  border: 1px solid #00bc77;
+
+  background-color: #00bc77;
+  color: white;
+
+  font-size: 16px;
+  font-weight: bold;
+
+  cursor: pointer;
+}
+
 .profile-error {
-  color: #ff8080;
+  color: white;
+  text-align: center;
+}
+
+.status {
+  color: white;
+  text-align: center;
+}
+
+@media (max-width: 720px) {
+  .accounts-container {
+    width: 90%;
+  }
+
+  .account {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .cta {
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  .transaction-button {
+    width: 100%;
+  }
+
+  .account-amount {
+    font-size: 32px;
+  }
 }
