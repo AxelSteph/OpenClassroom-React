@@ -34,16 +34,57 @@
 
 .edit-form {
   display: flex;
-  justify-content: center;
-  gap: 10px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 15px;
 
   margin: 20px auto;
+  width: 320px;
+}
+
+.edit-fields {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  gap: 15px;
+}
+
+.edit-field-row {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.edit-field-row label {
+  font-weight: bold;
+  color: white;
+  text-align: left;
 }
 
 .edit-form input {
+  width: 100%;
+  min-width: 0;
   padding: 8px;
 
   font-size: 16px;
+}
+
+.edit-form input[readonly] {
+  background-color: #d9d9d9;
+  color: #6b6b6b;
+  border: 1px solid #b5b5b5;
+  cursor: default;
+}
+
+.edit-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
 }
 
 .edit-form button {

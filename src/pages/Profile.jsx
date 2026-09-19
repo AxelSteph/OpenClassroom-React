@@ -45,16 +45,33 @@ function Profile() {
     dispatch(fetchAccounts());
   }, [dispatch]);
 
+  const startEditing = () => {
+    setUserName(user?.userName || "");
+    setIsEditing(true);
+  };
+
+  const cancelEditing = () => {
+    setUserName(user?.userName || "");
+    setIsEditing(false);
+  };
+
   const handleSave = async (event) => {
     event.preventDefault();
 
+    const trimmedUserName = userName.trim();
+
+    if (!trimmedUserName) {
+      return;
+    }
+
     const result = await dispatch(
-      updateUserName(userName)
+      updateUserName(trimmedUserName)
     );
 
     if (
       updateUserName.fulfilled.match(result)
     ) {
+      setUserName(trimmedUserName);
       setIsEditing(false);
     }
   };
@@ -83,10 +100,7 @@ function Profile() {
           {!isEditing ? (
             <button
               className="edit-button"
-              onClick={() => {
-                setUserName(user?.userName || "");
-                setIsEditing(true);
-              }}
+              onClick={startEditing}
             >
               Edit Name
             </button>
@@ -95,28 +109,60 @@ function Profile() {
               className="edit-form"
               onSubmit={handleSave}
             >
-              <input
-                type="text"
-                value={userName}
-                onChange={(event) =>
-                  setUserName(
-                    event.target.value
-                  )
-                }
-              />
+              <div className="edit-fields">
+                <div className="edit-field-row">
+                  <label htmlFor="first-name">
+                    Prénom
+                  </label>
+                  <input
+                    id="first-name"
+                    type="text"
+                    value={user?.firstName || ""}
+                    readOnly
+                  />
+                </div>
 
-              <button type="submit">
-                Save
-              </button>
+                <div className="edit-field-row">
+                  <label htmlFor="last-name">
+                    Nom
+                  </label>
+                  <input
+                    id="last-name"
+                    type="text"
+                    value={user?.lastName || ""}
+                    readOnly
+                  />
+                </div>
 
-              <button
-                type="button"
-                onClick={() =>
-                  setIsEditing(false)
-                }
-              >
-                Cancel
-              </button>
+                <div className="edit-field-row">
+                  <label htmlFor="user-name">
+                    Pseudo
+                  </label>
+                  <input
+                    id="user-name"
+                    type="text"
+                    value={userName}
+                    onChange={(event) =>
+                      setUserName(
+                        event.target.value
+                      )
+                    }
+                  />
+                </div>
+              </div>
+
+              <div className="edit-actions">
+                <button type="submit">
+                  Save
+                </button>
+
+                <button
+                  type="button"
+                  onClick={cancelEditing}
+                >
+                  Cancel
+                </button>
+              </div>
             </form>
           )}
         </div>
