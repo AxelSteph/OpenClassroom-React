@@ -54,7 +54,7 @@ function Header() {
               to="/profile"
               className="main-nav-item"
             >
-              ◉ {user?.firstName}
+              ◉ {user?.userName}
             </Link>
 
             <button

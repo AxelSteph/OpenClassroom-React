@@ -3,10 +3,12 @@ import {
   createSlice,
 } from "@reduxjs/toolkit";
 
+const storedToken = localStorage.getItem("token");
+
 const initialState = {
-  token: localStorage.getItem("token"),
+  token: storedToken,
   user: null,
-  isLoggedIn: Boolean(localStorage.getItem("token")),
+  isLoggedIn: false,
   loading: false,
   error: null,
 };
@@ -67,7 +69,8 @@ export const fetchUserProfile = createAsyncThunk(
       if (!response.ok) {
         return rejectWithValue(
           data.message ||
-            "Impossible de récupérer le profil"
+            "Impossible de récupérer le profil",
+          { status: response.status }
         );
       }
 
@@ -144,17 +147,17 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      .addCase(fetchUserProfile.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
       .addCase(fetchUserProfile.fulfilled, (state, action) => {
-        state.loading = false;
         state.user = action.payload;
+        state.isLoggedIn = true;
       })
       .addCase(fetchUserProfile.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
+        if (action.meta.status === 401 || action.meta.status === 403) {
+          state.token = null;
+          state.user = null;
+          state.isLoggedIn = false;
+          localStorage.removeItem("token");
+        }
       })
       .addCase(updateUserName.fulfilled, (state, action) => {
         state.user = action.payload;

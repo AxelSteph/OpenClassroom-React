@@ -3,12 +3,10 @@ import {
   useDispatch,
   useSelector,
 } from "react-redux";
-import { useNavigate } from "react-router-dom";
 
 import Account from "../components/Account";
 
 import {
-  fetchUserProfile,
   updateUserName,
 } from "../features/auth/authSlice";
 
@@ -20,7 +18,6 @@ import "../styles/Profile.css";
 
 function Profile() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const { user } = useSelector(
     (state) => state.auth
@@ -41,7 +38,6 @@ function Profile() {
     useState("");
 
   useEffect(() => {
-    dispatch(fetchUserProfile());
     dispatch(fetchAccounts());
   }, [dispatch]);
 
@@ -74,14 +70,6 @@ function Profile() {
       setUserName(trimmedUserName);
       setIsEditing(false);
     }
-  };
-
-  const handleTransactions = (
-    accountId
-  ) => {
-    navigate(
-      `/accounts/${accountId}/transactions`
-    );
   };
 
   return (
@@ -184,16 +172,12 @@ function Profile() {
           {accounts.map((account) => (
             <Account
               key={account.id}
+              id={account.id}
               name={account.name}
               mask={account.mask}
               balance={account.balance}
               balanceType={
                 account.balanceType
-              }
-              onTransactions={() =>
-                handleTransactions(
-                  account.id
-                )
               }
             />
           ))}
